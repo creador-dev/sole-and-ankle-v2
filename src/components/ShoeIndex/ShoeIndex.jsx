@@ -24,7 +24,7 @@ const ShoeIndex = ({ sortId, setSortId }) => {
             <option value="price">Price</option>
           </Select>
         </Header>
-        {/* <ShoeGrid /> */}
+        <ShoeGrid />
       </MainColumn>
       <LeftColumn>
         <Breadcrumbs>

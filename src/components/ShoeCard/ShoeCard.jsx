@@ -3,7 +3,12 @@ import styled from "styled-components";
 
 import { COLORS, WEIGHTS } from "../../constants";
 import { formatPrice, pluralize, isNewShoe } from "../../utils";
-import Spacer from "../Spacer";
+
+const TAG_VARIANTS = {
+  "new-release": "New Release",
+  "on-sale": "On Sale",
+  default: "",
+};
 
 const ShoeCard = ({
   slug,
@@ -37,14 +42,24 @@ const ShoeCard = ({
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
         </ImageWrapper>
-        <Spacer size={12} />
         <Row>
-          <Name>{name}</Name>
+          <Name salePrice={salePrice ? true : false}>{name}</Name>
           <Price>{formatPrice(price)}</Price>
         </Row>
         <Row>
           <ColorInfo>{pluralize("Color", numOfColors)}</ColorInfo>
+          {salePrice && <SalePrice>{formatPrice(salePrice)}</SalePrice>}
         </Row>
+        {TAG_VARIANTS[variant] && (
+          <Tag
+            style={{
+              "--bg-color":
+                variant === "new-release" ? COLORS.secondary : COLORS.primary,
+            }}
+          >
+            {TAG_VARIANTS[variant]}
+          </Tag>
+        )}
       </Wrapper>
     </Link>
   );
@@ -55,7 +70,12 @@ const Link = styled.a`
   color: inherit;
 `;
 
-const Wrapper = styled.article``;
+const Wrapper = styled.article`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
 
 const ImageWrapper = styled.div`
   position: relative;
@@ -63,10 +83,13 @@ const ImageWrapper = styled.div`
 
 const Image = styled.img`
   width: 100%;
+  border-radius: 16px 16px 4px 4px;
 `;
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -83,6 +106,18 @@ const ColorInfo = styled.p`
 const SalePrice = styled.span`
   font-weight: ${WEIGHTS.medium};
   color: ${COLORS.primary};
+`;
+
+const Tag = styled.div`
+  position: absolute;
+  background-color: var(--bg-color);
+  color: ${COLORS.white};
+  font-weight: ${WEIGHTS.bold};
+  font-size: 0.875rem;
+  padding: 7px 9px 9px 11px;
+  border-radius: 2px;
+  top: 12px;
+  right: -4px;
 `;
 
 export default ShoeCard;
